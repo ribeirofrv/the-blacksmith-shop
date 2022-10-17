@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.use('/products', route.products);
 app.use('/users', route.users);
+app.use('/orders', route.orders);
 
 app.use(ErrorMiddleware);
 
