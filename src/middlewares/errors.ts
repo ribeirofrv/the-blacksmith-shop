@@ -1,13 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
+import CustomError from '../error/CustomError';
 
-const ErrorMiddleware = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  const { message } = err;
-
-  if (message.includes('|')) {
-    const [code, errorMessage] = message.split('|');
-    return res.status(+code).json({ message: errorMessage });
+const ErrorMiddleware = (
+  err: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+): Response => {
+  if (err as CustomError) {
+    console.log(err);
+    
+    // return res.status(err.statusCode).json({ message: err.message });
   }
-  return res.status(500).json(message);
+  console.log(':: ERROR:', err);
+
+  return res.status(500).json({ message: err.message });
 };
 
 export default ErrorMiddleware;
