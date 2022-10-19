@@ -1,4 +1,6 @@
-interface User {
+import { RowDataPacket } from 'mysql2';
+
+export interface IUser {
   id?: number,
   username: string,
   classe?: string,
@@ -6,4 +8,7 @@ interface User {
   password: string,
 }
 
-export default User;
+export interface IUserLogin extends RowDataPacket { 
+  id: number,
+  username: string,
+}

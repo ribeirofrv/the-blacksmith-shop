@@ -1,5 +1,8 @@
-interface Token {
+export interface IToken {
   token: string,
 }
 
-export default Token;
+export interface IPayload {
+  id: number,
+  username: string,
+}
