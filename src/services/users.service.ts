@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import connection from '../models/connection';
 import UserModel from '../models/users.model';
-import User from '../interfaces/user.interface';
-import Token from '../interfaces/token.interface';
+import { IUser } from '../interfaces/user.interface';
+import { IToken } from '../interfaces/token.interface';
 import { SECRET_KEY, CONFIG } from '../middlewares/auth';
 
 export default class UserService {
@@ -12,7 +12,7 @@ export default class UserService {
     this.model = new UserModel(connection);
   }
 
-  public async create(user: User): Promise<Token> {
+  public async create(user: IUser): Promise<IToken> {
     const token = jwt.sign(
       {
         id: user.id,
