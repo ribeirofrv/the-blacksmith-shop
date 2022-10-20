@@ -7,12 +7,15 @@ const ErrorMiddleware = (
   res: Response,
   _next: NextFunction,
 ): Response => {
-  if (err.statusCode) {
-    return res.status(err.statusCode).json({ message: err.message });
-  }
-  console.log(':: ERROR:', err);
+  const { message } = err;
+  if (message.includes('|')) {
+    const [status, error] = message.split('|');
 
-  return res.status(500).json({ message: err });
+    return res.status(+status).json({ message: error });
+  }
+  console.log(':: ', err);
+
+  return res.status(500).json({ message });
 };
 
 export default ErrorMiddleware;
