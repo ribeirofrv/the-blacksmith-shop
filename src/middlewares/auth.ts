@@ -30,13 +30,13 @@ export const auth = async (req: Request, _res: Response, next: NextFunction) => 
   try {
     const token = req.header('Authorization');
 
-    if (!token) throw new CustomError(401, 'Token not found');
+    if (!token) throw new CustomError('401|Token not found');
 
     const decoded = verifyToken(token);
     (req as CustomRequest).token = decoded;
 
     next();
   } catch (error) {
-    throw new CustomError(401, 'Expired or invalid token');
+    throw new CustomError('401|Expired or invalid token');
   }
 };
