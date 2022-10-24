@@ -28,7 +28,7 @@ export default class OrderModel {
     const query = 'INSERT INTO Trybesmith.Orders (userId) VALUES (?)';
     const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
       query,
-      [order]
+      [order],
     );
     return insertId;
   }
