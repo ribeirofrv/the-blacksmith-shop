@@ -18,25 +18,28 @@ export const generateToken = (user: IPayload): string => {
   return token;
 };
 
-export const decodeToken = (token: string) => jwt.decode(token);
+export const decodeToken = (token: string | undefined) => jwt.decode(token as string);
 
-export const verifyToken = (token: string) => jwt.verify(token, SECRET_KEY);
+export const verifyToken = (token: string) => {
+  const result = jwt.verify(token, SECRET_KEY);
+  if (!result) throw new CustomError('401|Invalid token');
+  return result;
+};
 
 export interface CustomRequest extends Request {
   token: string | JwtPayload;
 }
 
-export const auth = async (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    const token = req.header('Authorization');
+export const auth = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => { 
+  const token = req.header('Authorization');
 
-    if (!token) throw new CustomError('401|Token not found');
+  if (!token) throw new CustomError('401|Token not found');
 
-    const decoded = verifyToken(token);
-    (req as CustomRequest).token = decoded;
-
-    next();
-  } catch (error) {
-    throw new CustomError('401|Expired or invalid token');
-  }
+  verifyToken(token);
+  
+  next();
 };

@@ -1,21 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
-import CustomError from '../error/CustomError';
+import { ErrorRequestHandler } from 'express';
+import { JsonWebTokenError } from 'jsonwebtoken';
 
-const ErrorMiddleware = (
-  err: CustomError,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-): Response => {
-  const { message } = err;
+const ErrorMiddleware: ErrorRequestHandler = (error, _request, response, _next) => {
+  const { message } = error;
   if (message.includes('|')) {
-    const [status, error] = message.split('|');
+    const [status, err] = message.split('|');
 
-    return res.status(+status).json({ message: error });
+    return response.status(+status).json({ message: err });
   }
-  console.log(':: ', err);
 
-  return res.status(500).json({ message });
+  if (error instanceof JsonWebTokenError) {
+    return response.status(401).json({ message: 'Invalid token' });
+  }
+
+  console.log(':: ', error);
+
+  return response.status(500).json({ message: 'Something went wrong!' });
 };
 
 export default ErrorMiddleware;
