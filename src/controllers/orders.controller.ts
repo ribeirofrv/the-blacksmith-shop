@@ -6,9 +6,15 @@ class OrdersController {
 
   public getAll = async (_request: Request, response: Response) => {
     const orders = await this.orderService.getAll();
-    console.log(orders);
     
     response.status(200).json(orders);
+  };
+
+  public register = async (request: Request, response: Response) => {
+    const token = request.header('Authorization');
+    const orders = await this.orderService.register(token as string, request.body);
+    
+    response.status(201).json(orders);
   };
 }
 
