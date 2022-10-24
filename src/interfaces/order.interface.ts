@@ -1,7 +1,14 @@
-interface IOrder {
+export default interface IOrder {
   id: number;
   userId: number;
   productsIds: number[];
 }
 
-export default IOrder;
+export interface IOrderById {
+  userId: number;
+  productsIds: number[];
+}
+
+export interface IOrderToRegister {
+  productsIds: number[];
+}
